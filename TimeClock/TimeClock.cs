@@ -16,13 +16,13 @@ namespace TimeClock
         private static DateTime? endWorkTime;
 
 
-        public static void ManageWork(int userId, DatabaseManager dbManager)
+        public static void ManageWork(int userId )
         {
-            if (dbManager.HasClockedInToday(userId))
+            if (DatabaseManager.HasClockedInToday(userId))
             {
-                if (!dbManager.HasClockedOutToday(userId))
+                if (!DatabaseManager.HasClockedOutToday(userId))
                 {
-                    EndWork(userId, dbManager);
+                    EndWork(userId);
                     MessageBox.Show($"You have successfully logged your exit.{endWorkTime}");
                 }
                 else
@@ -32,16 +32,16 @@ namespace TimeClock
             }
             else
             {
-                StartWork(userId, dbManager);
+                StartWork(userId);
                 MessageBox.Show($"You have successfully logged your entry.{startWorkTime}");
             }
         }
-        public static void StartWork(int userId, DatabaseManager dbManager)
+        public static void StartWork(int userId)
         {
             startWorkTime = DateTime.Now;
-            if (!dbManager.HasClockedInToday(userId))
+            if (!DatabaseManager.HasClockedInToday(userId))
             {
-                dbManager.LogClockEntry(userId, startWorkTime.Value.Date, startWorkTime.Value);
+                DatabaseManager.LogClockEntry(userId, startWorkTime.Value.Date, startWorkTime.Value);
                 Console.WriteLine($"Work started at: {startWorkTime}");
             }
             else
@@ -50,7 +50,7 @@ namespace TimeClock
             }
         }
 
-        public static void EndWork(int userId, DatabaseManager dbManager)
+        public static void EndWork(int userId)
         {
             if (!startWorkTime.HasValue)
             {
@@ -62,7 +62,7 @@ namespace TimeClock
 
             if (endWorkTime.HasValue)
             {
-                dbManager.UpdateClockOutTime(userId, endWorkTime.Value);
+                DatabaseManager.UpdateClockOutTime(userId, endWorkTime.Value);
                 var duration = endWorkTime.Value - startWorkTime.Value;
                 Console.WriteLine($"Work stopped at: {endWorkTime}");
                 Console.WriteLine($"Total work duration: {duration}");

@@ -35,6 +35,8 @@
             this.enterbtn = new System.Windows.Forms.Button();
             this.exitBtn = new System.Windows.Forms.Button();
             this.addUserBtn = new System.Windows.Forms.Button();
+            this.changePassBtn = new System.Windows.Forms.Button();
+            this.TimeEntriesBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -93,19 +95,40 @@
             // 
             // addUserBtn
             // 
-            this.addUserBtn.Location = new System.Drawing.Point(699, 26);
+            this.addUserBtn.Location = new System.Drawing.Point(660, 12);
             this.addUserBtn.Name = "addUserBtn";
-            this.addUserBtn.Size = new System.Drawing.Size(75, 23);
+            this.addUserBtn.Size = new System.Drawing.Size(128, 46);
             this.addUserBtn.TabIndex = 6;
             this.addUserBtn.Text = "addUser";
             this.addUserBtn.UseVisualStyleBackColor = true;
-           
+            // 
+            // changePassBtn
+            // 
+            this.changePassBtn.Location = new System.Drawing.Point(624, 349);
+            this.changePassBtn.Name = "changePassBtn";
+            this.changePassBtn.Size = new System.Drawing.Size(164, 75);
+            this.changePassBtn.TabIndex = 7;
+            this.changePassBtn.Text = "change Password";
+            this.changePassBtn.UseVisualStyleBackColor = true;
+            this.changePassBtn.Click += new System.EventHandler(this.changePassBtn_Click);
+            // 
+            // TimeEntriesBtn
+            // 
+            this.TimeEntriesBtn.Location = new System.Drawing.Point(12, 12);
+            this.TimeEntriesBtn.Name = "TimeEntriesBtn";
+            this.TimeEntriesBtn.Size = new System.Drawing.Size(116, 46);
+            this.TimeEntriesBtn.TabIndex = 8;
+            this.TimeEntriesBtn.Text = "Time Entries";
+            this.TimeEntriesBtn.UseVisualStyleBackColor = true;
+            this.TimeEntriesBtn.Click += new System.EventHandler(this.TimeEntriesBtn_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.TimeEntriesBtn);
+            this.Controls.Add(this.changePassBtn);
             this.Controls.Add(this.addUserBtn);
             this.Controls.Add(this.exitBtn);
             this.Controls.Add(this.enterbtn);
@@ -130,6 +153,8 @@
         private System.Windows.Forms.Button enterbtn;
         private System.Windows.Forms.Button exitBtn;
         private System.Windows.Forms.Button addUserBtn;
+        private System.Windows.Forms.Button changePassBtn;
+        private System.Windows.Forms.Button TimeEntriesBtn;
     }
 }
 

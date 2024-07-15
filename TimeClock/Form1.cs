@@ -12,17 +12,17 @@ namespace TimeClock
 {
     public partial class Form1 : Form
     {
-        DatabaseManager dbManager;
+
 
         public Form1()
         {
             InitializeComponent();
-            dbManager = new DatabaseManager();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+
         }
         private void enterbtn_Click(object sender, EventArgs e)
         {
@@ -32,19 +32,28 @@ namespace TimeClock
             {
                 string password = passwordTxt.Text;
 
-                if (dbManager.ValidateCredentials(userId, password))
+                if (DatabaseManager.ValidateCredentials(userId, password))
                 {
-                    // Check if the user has already clocked in today
-                    if (!dbManager.HasClockedInToday(userId))
+                    if (!PasswordManagement.PasswordHasExpired(userId))
                     {
-                        // User has already clocked in today, manage work
-                        TimeClock.ManageWork(userId, dbManager);
+                        // Check if the user has already clocked in today
+                        if (!DatabaseManager.HasClockedInToday(userId))
+                        {
+                            // User has already clocked in today, manage work
+                            TimeClock.ManageWork(userId);
+                        }
+                        else
+                        {
+                            // User has valid credentials but hasn't clocked in today
+                            MessageBox.Show("You have not clocked in today.");
+                        }
                     }
                     else
                     {
-                        // User has valid credentials but hasn't clocked in today
-                        MessageBox.Show("You have not clocked in today.");
-                        // Optionally, you might provide an option to clock in here
+                        MessageBox.Show("you need to change your password");
+                        UpdatePassword updatePassword = new UpdatePassword();
+                        updatePassword.SetUserId(userId);
+                        updatePassword.Show();
                     }
                 }
                 else
@@ -76,13 +85,13 @@ namespace TimeClock
             if (int.TryParse(idTxt.Text, out userId))
             {
                 // Check if the user has already clocked in today
-                if (dbManager.HasClockedInToday(userId))
+                if (DatabaseManager.HasClockedInToday(userId))
                 {
-                    TimeClock.ManageWork(userId, dbManager);
+                    TimeClock.ManageWork(userId);
                 }
                 else
                 {
-                    MessageBox.Show("You have not clocked in today.");
+                    MessageBox.Show("You need clocked in befor you try exit.");
                 }
             }
             else
@@ -91,5 +100,39 @@ namespace TimeClock
             }
         }
 
+        private void changePassBtn_Click(object sender, EventArgs e)
+        {
+
+            // Check if userId is valid
+            if (!int.TryParse(idTxt.Text, out int userId))
+            {
+                MessageBox.Show("Please enter a valid user ID.");
+                return;
+            }
+
+            // Create an instance of UpdatePassword form
+            UpdatePassword updatePassword = new UpdatePassword();
+
+            // Set the user ID for the UpdatePassword form
+            updatePassword.SetUserId(userId);
+
+            // Show the UpdatePassword form
+            updatePassword.Show();
+        }
+
+        private void TimeEntriesBtn_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(idTxt.Text, out int userId))
+            {
+
+                TimeEntriesForm timeEntriesForm = new TimeEntriesForm(userId); // Pass userId to the TimeEntriesForm
+                timeEntriesForm.ShowDialog(); 
+            }
+            else
+            {
+                // Handle the case where parsing idTxt.Text to int fails
+                MessageBox.Show("Invalid user ID. Please enter a valid integer ID.");
+            }
+        }
     }
 }

@@ -13,6 +13,10 @@ namespace TimeClock
         private string _password;
         private DateTime _passwordExpiry;
 
+        public Users()
+        {
+
+        }
         public Users(string name, string password)
         {
             name = _name;

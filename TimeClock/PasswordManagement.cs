@@ -4,54 +4,87 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace TimeClock
 {
+    
     internal static class PasswordManagement
     {
         private static readonly string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
- {
-        // Assuming you have a method in DatabaseManager to update the password
+
         public static bool UpdatePassword(Users user, string newPassword)
         {
             int userId = user.Id;
             string currentPassword = user.Password;
 
             // Validate current credentials before proceeding
-            if (DatabaseManager.ValidateCredentials(userId, currentPassword))
+            if (!DatabaseManager.ValidateCredentials(userId, currentPassword))
             {
-                // Additional validation logic (e.g., password history check) can go here
-
-                // Update the user's password in the Users object
-                user.Password = newPassword;
-
-                // Save the new password to the database
-                bool passwordUpdated = DatabaseManager.UpdatePassword(userId, newPassword);
-
-                if (passwordUpdated)
-                {
-                    // Optionally, update the password expiry here if you manage it
-                    // user.PasswordExpiry = DateTime.Now.AddMonths(3); // Example: Set expiry 3 months from now
-
-                    // Password updated successfully
-                    return true;
-                }
-                else
-                {
-                    // Handle database update failure if needed
-                    return false;
-                }
-            }
-            else
-            {
-                // Invalid current credentials, return false or handle as needed
+                // Invalid current credentials
                 return false;
+            }
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open(); // Open the connection
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Validate password history within the transaction
+                        if (!DatabaseManager.ValidateNewPassword(userId, newPassword, connection, transaction))
+                        {
+                            // Failed password history validation
+                            return false;
+                        }
+
+                        // Update the user's password in the Users table within the transaction
+                        bool passwordUpdated = DatabaseManager.UpdateUserPassword(userId, newPassword, connection, transaction);
+
+                        if (passwordUpdated)
+                        {
+                            // Insert old password into PasswordHistory within the transaction
+                            bool historyUpdated = DatabaseManager.InsertPasswordHistory(userId, currentPassword, connection, transaction);
+
+                            if (historyUpdated)
+                            {
+                                // Commit the transaction
+                                transaction.Commit();
+                                return true;
+                            }
+                            else
+                            {
+                                // Rollback if history update fails
+                                transaction.Rollback();
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            // Rollback if password update fails
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Rollback transaction on error
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back: " + ex.Message);
+                        throw; // Rethrow the exception to handle it at a higher level
+                    }
+                }
             }
         }
 
-        public static bool PasswordHasExpired(Users user)
+
+        public static bool PasswordHasExpired(int userID)
         {
-            return user.PasswordExpiry < DateTime.Now;
+            Users user = DatabaseManager.GetUserById(userID);
+            DateTime expiryDate = user.PasswordExpiry.AddDays(90);
+            return expiryDate < DateTime.Now;
         }
     }
 }
