@@ -33,9 +33,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net-Next, Version=4.0.3.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net-Next.4.0.3\lib\net472\BCrypt.Net-Next.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,32 +63,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseManager.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="serviec\DatabaseManager.cs" />
+    <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="View\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="PasswordManagement.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeClock.cs" />
-    <Compile Include="TimeEntriesForm.cs">
+    <Compile Include="serviec\TimeClock.cs" />
+    <Compile Include="View\TimeEntriesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TimeEntriesForm.Designer.cs">
+    <Compile Include="View\TimeEntriesForm.Designer.cs">
       <DependentUpon>TimeEntriesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TimeEntry.cs" />
-    <Compile Include="UpdatePassword.cs">
+    <Compile Include="Model\TimeEntry.cs" />
+    <Compile Include="View\UpdatePassword.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UpdatePassword.Designer.cs">
+    <Compile Include="View\UpdatePassword.Designer.cs">
       <DependentUpon>UpdatePassword.cs</DependentUpon>
     </Compile>
-    <Compile Include="Users.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <Compile Include="Model\User.cs" />
+    <EmbeddedResource Include="View\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -84,12 +100,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="TimeEntriesForm.resx">
+    <EmbeddedResource Include="View\TimeEntriesForm.resx">
       <DependentUpon>TimeEntriesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UpdatePassword.resx">
+    <EmbeddedResource Include="View\UpdatePassword.resx">
       <DependentUpon>UpdatePassword.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -103,5 +120,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

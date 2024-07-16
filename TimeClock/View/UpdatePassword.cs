@@ -26,7 +26,7 @@ namespace TimeClock
 
         private void updateBtn_Click(object sender, EventArgs e)
         {
-            Users user = DatabaseManager.GetUserById(userId);
+            User user = DatabaseManager.GetUserById(userId);
             string oldPassword = user.Password;
             if (oldPassTxt.Text == oldPassword)
             {

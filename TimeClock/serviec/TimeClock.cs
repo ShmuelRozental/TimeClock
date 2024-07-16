@@ -14,6 +14,7 @@ namespace TimeClock
 
         private static DateTime? startWorkTime;
         private static DateTime? endWorkTime;
+        private static TimeEntry currentEntry; 
 
 
         public static void ManageWork(int userId )
@@ -41,36 +42,30 @@ namespace TimeClock
             startWorkTime = DateTime.Now;
             if (!DatabaseManager.HasClockedInToday(userId))
             {
-                DatabaseManager.LogClockEntry(userId, startWorkTime.Value.Date, startWorkTime.Value);
-                Console.WriteLine($"Work started at: {startWorkTime}");
+                TimeEntry timeEntry = new TimeEntry(); // Create a new TimeEntry object
+                DatabaseManager.LogClockEntry(userId, timeEntry.EntryTime.Date, timeEntry.EntryTime);
+                Console.WriteLine($"Work started at: {timeEntry.EntryTime}");
             }
             else
             {
                 Console.WriteLine("You have already clocked in today.");
             }
         }
-
         public static void EndWork(int userId)
         {
-            if (!startWorkTime.HasValue)
+            if (currentEntry != null)
             {
-                Console.WriteLine("Work has not started yet.");
-                return;
-            }
+                currentEntry.ClockOut(); // Set ExitTime and calculate work duration
+                DatabaseManager.UpdateClockOutTime(userId, currentEntry.ExitTime.Value);
+                Console.WriteLine($"Work stopped at: {currentEntry.ExitTime}");
+                Console.WriteLine($"Total work duration: {currentEntry.CalculateWorkDuration()}");
 
-            endWorkTime = DateTime.Now;
-
-            if (endWorkTime.HasValue)
-            {
-                DatabaseManager.UpdateClockOutTime(userId, endWorkTime.Value);
-                var duration = endWorkTime.Value - startWorkTime.Value;
-                Console.WriteLine($"Work stopped at: {endWorkTime}");
-                Console.WriteLine($"Total work duration: {duration}");
-                startWorkTime = null;
+                // Reset the currentEntry for next session
+                currentEntry = null;
             }
             else
             {
-                Console.WriteLine("Failed to end work due to invalid time.");
+                Console.WriteLine("Work has not started yet.");
             }
         }
     }

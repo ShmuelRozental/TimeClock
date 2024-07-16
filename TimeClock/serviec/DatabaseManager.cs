@@ -10,7 +10,7 @@ namespace TimeClock
         private static readonly string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         //get user from data base by id
-        public static Users GetUserById(int userId)
+        public static User GetUserById(int userId)
         {
             string query = "SELECT UserId, UserName, Password, PasswordExpiry, CreatedAt FROM Users WHERE UserId = @UserId";
 
@@ -25,7 +25,7 @@ namespace TimeClock
                     {
                         if (reader.Read())
                         {
-                            Users user = new Users
+                            User user = new User
                             {
                                 Id = (int)reader["UserId"],
                                 Name = reader["UserName"].ToString(),

@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace TimeClock
 {
-    public class Users
+    public class User
     {
         private int _id;
         private string _name;
         private string _password;
         private DateTime _passwordExpiry;
 
-        public Users()
+        public User()
         {
 
         }
-        public Users(string name, string password)
+        public User(string name, string password)
         {
-            name = _name;
+            _name = name;
             _password = password;
         }
 

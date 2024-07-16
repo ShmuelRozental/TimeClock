@@ -14,7 +14,7 @@ namespace TimeClock
     {
         private static readonly string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public static bool UpdatePassword(Users user, string newPassword)
+        public static bool UpdatePassword(User user, string newPassword)
         {
             int userId = user.Id;
             string currentPassword = user.Password;
@@ -79,10 +79,9 @@ namespace TimeClock
             }
         }
 
-
-        public static bool PasswordHasExpired(int userID)
+        public static bool PasswordHasExpired(int userId)
         {
-            Users user = DatabaseManager.GetUserById(userID);
+            User user = DatabaseManager.GetUserById(userId);
             DateTime expiryDate = user.PasswordExpiry.AddDays(90);
             return expiryDate < DateTime.Now;
         }
